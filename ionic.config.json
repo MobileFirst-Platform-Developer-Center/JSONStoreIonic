@@ -1,0 +1,7 @@
+{
+  "name": "JSONStoreIonic",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

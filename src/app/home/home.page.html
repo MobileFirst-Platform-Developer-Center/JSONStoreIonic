@@ -11,14 +11,14 @@
         <div id="container">           
             <div id="initCollection_screen">
                 <h3 style="margin-ion-button:3px">Initialize a collection:</h3>
-                <ion-button id="initCollection" class="WideSubmition-button">Initialize collection</ion-button>
+                <ion-button  (click)="initCollection()" class="WideSubmition-button">Initialize collection</ion-button>
                 <hr />
                 <h3 style="margin-ion-button:3px">Initialize a secured collection:</h3>
                 <p>A collection can be initializes as a <b>secured collection</b> by defining a username and password.
                 When initializing a collection with username and password - the collection data will be encrypted.</p>                
                   <ion-input id='initUsername' type='text' placeholder='user name'></ion-input>
         		    <ion-input id='initPassword' type='password' placeholder='password'></ion-input>
-                    <ion-button id="initSecuredCollection" class="WideSubmition-button">Initialize secured collection</ion-button>          
+                    <ion-button (click)="initSecuredCollection()" class="WideSubmition-button">Initialize secured collection</ion-button>          
             </div>
             <div id="apiCommands_screen" style="display:none">
               <div id="CloseRemoveDestroyion-buttonsDiv" >
@@ -27,9 +27,9 @@
                 <ion-button id="destroyAllCollectionsion-button" class="CloseRemoveDestroyion-buttons">Destroy<br/>collection</ion-button>
               </div>
               <div id="selectBoxDiv">
-                  <select id="api_select">
-                    <option value="0">-- Select JSONStore action --</option>
-                </select>
+                  <ion-select id="api_select">
+                    <ion-select-option value="0">-- Select JSONStore action --</ion-select-option>
+                </ion-select>
               </div>
               <div id="ApisAdditionalInfoWrapperDiv">
                   <!-- Add Data -->

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +13,18 @@ export class HomePage {
   collections = {};
   options = {};
   query = {};
+
+
+  // View Components
+  initCollection_screen = false;
+  apiCommands_screen = true;
+
+  // Display Components
+  resultsDiv = "";
+
+  constructor(private zone: NgZone) {
+  }
+  
  
 
   ngAfterViewInit() {
@@ -124,39 +136,38 @@ initCollection(isSecured){
     this.options["password"] = document.getElementById("initPassword")["value"];
   }
 
-WL.JSONStore.init(this.collections, this.options).then(function () {
-      // build the <select> options + hide the init screen + display the second screen
-      this.buildSelectOptions(document.getElementById("api_select"));
-      document.getElementById("initCollection_screen").style.display = "none";
-      document.getElementById("apiCommands_screen").style.display = "block";
+WL.JSONStore.init(this.collections, this.options).then(() => {
+  // build the <select> options + hide the init screen + display the second screen
+    //  this.buildSelectOptions(document.getElementById("api_select"));
+      this. initCollection_screen = true;
+      this.apiCommands_screen = false;
 
       if(isSecured == "secured") {
-          this.showHideConsole("show");
-          document.getElementById("resultsDiv").innerHTML = "Secured Collection Initialized Successfuly<br>User Name: "+ this.options.username +" | Password: "+ this.options.password;
+         // this.showHideConsole("show");
+          this.resultsDiv = "Secured Collection Initialized Successfuly<br>User Name: "+ this.options["username"] +" | Password: "+ this.options["password"];
           // Clear the username & password fields
           document.getElementById("initUsername")["value"] = "";
           document.getElementById("initPassword")["value"] = "";
       }
       else {
-          document.getElementById("resultsDiv").innerHTML = "Collection Initialized Successfuly";
-      }
+          this.resultsDiv = "Collection Initialized Successfuly";
+      } 
   })
-  .fail(function (errorObject) {
+  .fail((errorObject) => {
       alert("Filed to initialize collection\n"+ JSON.stringify(errorObject));
 });
 }
-
 //****************************************************
 // closeCollection
 // - Log out from the current collection
 //****************************************************
 closeCollection(){
-  WL.JSONStore.closeAll({}).then(function () {
+  WL.JSONStore.closeAll({}).then(() => {
       this.showHideConsole("show");
       document.getElementById("apiCommands_screen").style.display = "none";
       document.getElementById("initCollection_screen").style.display = "block";
-      document.getElementById("resultsDiv").innerHTML = "Collection Closed Successfuly";
-}).fail(function (errorObject) {
+      this.resultsDiv = "Collection Closed Successfuly";
+}).fail((errorObject) => {
   alert("Failed to Close collection!");
 });
 }
@@ -166,12 +177,12 @@ closeCollection(){
 // - Deletes all the collection's documents
 //****************************************************
 removeCollection(){
-  WL.JSONStore.get(this.collectionName).removeCollection({}).then(function () {
+  WL.JSONStore.get(this.collectionName).removeCollection({}).then(() => {
       this.showHideConsole("show");
       document.getElementById("apiCommands_screen").style.display = "none";
       document.getElementById("initCollection_screen").style.display = "block";
-      document.getElementById("resultsDiv").innerHTML = "Collection Removed Successfuly";
-}).fail(function (errorObject) {
+      this.resultsDiv = "Collection Removed Successfuly";
+}).fail((errorObject) => {
   alert("Failed to Remove collection!");
 });
 }
@@ -181,12 +192,12 @@ removeCollection(){
 // - Completely wipes data for all users
 //****************************************************
 destroy(){
-  WL.JSONStore.destroy({}).then(function () {
+  WL.JSONStore.destroy({}).then(() => {
       this.showHideConsole("show");
       document.getElementById("apiCommands_screen").style.display = "none";
       document.getElementById("initCollection_screen").style.display = "block";
-      document.getElementById("resultsDiv").innerHTML = "Collection Destroyed Successfuly";
-}).fail(function (errorObject) {
+      this.resultsDiv = "Collection Destroyed Successfuly";
+}).fail((errorObject) => {
   alert("Failed to Destroy collection!");
 });
 }
@@ -201,12 +212,12 @@ addData(){
   data["age"] = document.getElementById("addAge")["value"];
 
   try {
-      WL.JSONStore.get(this.collectionName).add(data, options).then(function () {
+      WL.JSONStore.get(this.collectionName).add(data, options).then(() => {
           this.showHideConsole("show");
-          document.getElementById("resultsDiv").innerHTML = "New Document Added Successfuly<br>Name: "+data["name"]+" | Age: "+data["age"];
-  }).fail(function (errorObject) {
+          this.resultsDiv = "New Document Added Successfuly<br>Name: "+data["name"]+" | Age: "+data["age"];
+  }).fail((errorObject) => {
           this.showHideConsole("show");
-          document.getElementById("resultsDiv").innerHTML = "Failed to Add Data";
+          this.resultsDiv = "Failed to Add Data";
   });
   }
   catch(e){
@@ -226,10 +237,10 @@ findById(){
   object.push(id);
 
   try {
-      WL.JSONStore.get(this.collectionName).findById(object, {}).then(function (res) {
-          document.getElementById("resultsDiv").innerHTML = JSON.stringify(res);
-  }).fail(function (errorObject) {
-          document.getElementById("resultsDiv").innerHTML = errorObject.msg;
+      WL.JSONStore.get(this.collectionName).findById(object, {}).then((res) => {
+          this.resultsDiv = JSON.stringify(res);
+  }).fail((errorObject) => {
+          this.resultsDiv = errorObject.msg;
   });
 } catch (e) {
   alert(e.Messages);
@@ -247,10 +258,10 @@ findByName(){
   query[name] = name;
   if(name != ""){
       try {
-          WL.JSONStore.get(this.collectionName).find(query, this.options).then(function (res) {
-          document.getElementById("resultsDiv").innerHTML = JSON.stringify(res);
-      }).fail(function (errorObject) {
-          document.getElementById("resultsDiv").innerHTML = errorObject.msg;
+          WL.JSONStore.get(this.collectionName).find(query, this.options).then((res) => {
+          this.resultsDiv = JSON.stringify(res);
+      }).fail((errorObject) => {
+          this.resultsDiv = errorObject.msg;
       });
       } catch (e) {
           alert(e.Messages);
@@ -280,10 +291,10 @@ findByAge(){
       };
 
       try {
-          WL.JSONStore.get(this.collectionName).find(this.query, options).then(function (res) {
-          document.getElementById("resultsDiv").innerHTML = JSON.stringify(res);
-      }).fail(function (errorObject) {
-          document.getElementById("resultsDiv").innerHTML = errorObject.msg;
+          WL.JSONStore.get(this.collectionName).find(this.query, options).then((res) => {
+          this.resultsDiv = JSON.stringify(res);
+      }).fail((errorObject) => {
+          this.resultsDiv = errorObject.msg;
       });
       } catch (e) {
           alert(e.Messages);
@@ -300,10 +311,10 @@ findAll(){
   this.options["limit"] = 10;
 
   try {
-      WL.JSONStore.get(this.collectionName).findAll(this.options).then(function (res) {
-          document.getElementById("resultsDiv").innerHTML = JSON.stringify(res);
-  }).fail(function (errorObject) {
-          document.getElementById("resultsDiv").innerHTML = errorObject.msg;
+      WL.JSONStore.get(this.collectionName).findAll(this.options).then((res) => {
+          this.resultsDiv = JSON.stringify(res);
+  }).fail((errorObject) => {
+          this.resultsDiv = errorObject.msg;
   });
 } catch (e) {
   alert(e.Messages);
@@ -320,10 +331,10 @@ replaceShowDoc(){
  obj.push(id);
  this.showHideConsole("hide");
  try {
-      WL.JSONStore.get(this.collectionName).findById(obj,{}).then(function (res) {
+      WL.JSONStore.get(this.collectionName).findById(obj,{}).then((res) => {
           document.getElementById("replaceName")["value"] = res[0].json.name;
           document.getElementById("replaceAge")["value"] = res[0].json.age;
-      }).fail(function (errorObject) {
+      }).fail((errorObject) => {
           alert(errorObject.msg);
       });
   } catch (e) {
@@ -356,11 +367,11 @@ replaceDoc(){
 
   WL.JSONStore.get(this.collectionName).replace(doc, options).then((numberOfDocumentsReplaced) => {
       this.showHideConsole("show");
-      document.getElementById("resultsDiv").innerHTML = "Document updated successfuly";
+      this.resultsDiv = "Document updated successfuly";
       this.clearAndHideReplaceDiv();
   })
-  .fail(function (errorObject) {
-      document.getElementById("resultsDiv").innerHTML = "Failed to update document: " + errorObject.msg
+  .fail((errorObject) => {
+      this.resultsDiv = "Failed to update document: " + errorObject.msg
       this.clearAndHideReplaceDiv();
   });
 }
@@ -374,10 +385,10 @@ removeDoc(){
   var query = {_id: id};
   var options = {exact: true};
   try {
-    WL.JSONStore.get(this.collectionName).remove(query, options).then(function (res) {
-          document.getElementById("resultsDiv").innerHTML = "Documents removed: " + JSON.stringify(res)
-  }).fail(function (errorObject) {
-          document.getElementById("resultsDiv").innerHTML = errorObject.msg
+    WL.JSONStore.get(this.collectionName).remove(query, options).then((res) => {
+          this.resultsDiv = "Documents removed: " + JSON.stringify(res)
+  }).fail((errorObject) => {
+          this.resultsDiv = errorObject.msg
   });
   } catch (e) {
   alert(e.Messages);
@@ -390,10 +401,10 @@ removeDoc(){
 //****************************************************
 countDocs(){
   try {
-    WL.JSONStore.get(this.collectionName).count({},{}).then(function (res) {
-          document.getElementById("resultsDiv").innerHTML = "Number of documents in the collection: " + res;
-  }).fail(function (errorObject) {
-          document.getElementById("resultsDiv").innerHTML = errorObject.msg;
+    WL.JSONStore.get(this.collectionName).count({},{}).then((res) => {
+          this.resultsDiv = "Number of documents in the collection: " + res;
+  }).fail((errorObject) => {
+          this.resultsDiv = errorObject.msg;
   });
 } catch (e) {
   alert(e.Messages);
@@ -410,7 +421,7 @@ loadFromAdapter(){
 
       resource.send()
 
-      .then(function (responseFromAdapter) {
+      .then((responseFromAdapter) => {
         // Handle invokeProcedure success.
 
         var data = responseFromAdapter.responseJSON.peopleList;
@@ -435,15 +446,15 @@ loadFromAdapter(){
         return WL.JSONStore.get(this.collectionName).change(data, changeOptions);
       })
 
-      .then(function (res) {
+      .then((res) => {
 
          // Handle change success.
-        document.getElementById("resultsDiv").innerHTML = JSON.stringify(res) + " Documents Loaded From Adapter" ;
+        this.resultsDiv = JSON.stringify(res) + " Documents Loaded From Adapter" ;
       })
 
-      .fail(function (errorObject) {
+      .fail((errorObject) => {
         // Handle failure.
-        document.getElementById("resultsDiv").innerHTML = errorObject.msg;
+        this.resultsDiv = errorObject.msg;
       });
 
 
@@ -458,9 +469,9 @@ loadFromAdapter(){
 //****************************************************
 getDirtyDocs(){
   try {
-      WL.JSONStore.get(this.collectionName).getAllDirty({}).then(function (res) {
-          document.getElementById("resultsDiv").innerHTML = "Dirty Documents:<br>" + JSON.stringify(res);
-      }).fail(function (errorObject) {
+      WL.JSONStore.get(this.collectionName).getAllDirty({}).then((res) => {
+          this.resultsDiv = "Dirty Documents:<br>" + JSON.stringify(res);
+      }).fail((errorObject) => {
           alert("Failed to get dirty documents:\n"+ errorObject.msg);
       });
   } catch (e) {
@@ -481,7 +492,7 @@ pushToAdapter(){
 
       .getAllDirty({})
 
-      .then(function (arrayOfDirtyDocuments) {
+      .then((arrayOfDirtyDocuments) => {
         // Handle getAllDirty success.
 
         dirtyDocs = arrayOfDirtyDocuments;
@@ -492,7 +503,7 @@ pushToAdapter(){
         return resource.send();
       })
 
-      .then(function (responseFromAdapter) {
+      .then((responseFromAdapter) => {
         // Handle invokeProcedure success.
 
         // You may want to check the response from the adapter
@@ -500,13 +511,13 @@ pushToAdapter(){
         return WL.JSONStore.get(this.collectionName).markClean(dirtyDocs, {});
       })
 
-      .then(function (res) {
+      .then((res) => {
         // Handle markClean success.
-        document.getElementById("resultsDiv").innerHTML = JSON.stringify(res) + "Documents Pushed Successfully";
+        this.resultsDiv = JSON.stringify(res) + "Documents Pushed Successfully";
 
       })
 
-      .fail(function (errorObject) {
+      .fail((errorObject) => {
         // Handle failure.
         alert(errorObject.msg);
       });
@@ -528,10 +539,10 @@ changePassword(){
       alert("Please enter new password");
   }
   else{
-      WL.JSONStore.changePassword(this.options["password"], newPassword, this.options["username"], {}).then(function () {
-          document.getElementById("resultsDiv").innerHTML = "Password changed successfuly"
-      }).fail(function (errorObject) {
-          document.getElementById("resultsDiv").innerHTML = "Failed to change password:\n" + errorObject.msg
+      WL.JSONStore.changePassword(this.options["password"], newPassword, this.options["username"], {}).then(() => {
+          this.resultsDiv = "Password changed successfuly"
+      }).fail((errorObject) => {
+          this.resultsDiv = "Failed to change password:\n" + errorObject.msg
       });
   }
 }
@@ -542,10 +553,10 @@ changePassword(){
 getFileInfo(){
   try {
       WL.JSONStore.fileInfo()
-      .then(function (res) {
-          document.getElementById("resultsDiv").innerHTML = JSON.stringify(res);
+      .then((res) => {
+          this.resultsDiv = JSON.stringify(res);
       })
-      .fail(function () {
+      .fail(() => {
           alert("Failed To Get File Information");
       });
   } catch (e) {

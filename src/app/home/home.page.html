@@ -11,20 +11,20 @@
         <div id="container">           
             <div [hidden]="initCollection_screen" id="initCollection_screen" >
                 <h3 style="margin-ion-button:3px">Initialize a collection:</h3>
-                <ion-button  (click)="initCollection()" class="WideSubmition-button">Initialize collection</ion-button>
+                <ion-button  (click)="initCollection(false)" class="WideSubmition-button">Initialize collection</ion-button>
                 <hr />
                 <h3 style="margin-ion-button:3px">Initialize a secured collection:</h3>
                 <p>A collection can be initializes as a <b>secured collection</b> by defining a username and password.
                 When initializing a collection with username and password - the collection data will be encrypted.</p>                
-                  <ion-input id='initUsername' type='text' placeholder='user name'></ion-input>
-        		    <ion-input id='initPassword' type='password' placeholder='password'></ion-input>
-                    <ion-button (click)="initSecuredCollection()" class="WideSubmition-button">Initialize secured collection</ion-button>          
+                  <ion-input [(ngModel)]='initUsername' type='text' placeholder='user name'></ion-input>
+        		    <ion-input [(ngModel)]='initPassword' type='password' placeholder='password'></ion-input>
+                    <ion-button (click)="initCollection(true)" class="WideSubmition-button">Initialize secured collection</ion-button>          
             </div>
             <div [hidden]="apiCommands_screen" id="apiCommands_screen" >
-              <div id="CloseRemoveDestroyion-buttonsDiv" >
-                <ion-button id="closeCollectionion-button" class="CloseRemoveDestroyion-buttons">Close<br/>collection</ion-button>
-                <ion-button id="removeCollectionion-button" class="CloseRemoveDestroyion-buttons">Remove<br/>collection</ion-button>
-                <ion-button id="destroyAllCollectionsion-button" class="CloseRemoveDestroyion-buttons">Destroy<br/>collection</ion-button>
+              <div id="CloseRemoveDestroyButtonsDiv" align="center">
+                <ion-button (click)="closeCollection()">Close<br/>collection</ion-button>
+                <ion-button (click)="removeCollection()">Remove<br/>collection</ion-button>
+                <ion-button (click)="destroy()">Destroy<br/>collection</ion-button>
               </div>
               <div id="selectBoxDiv">
                   <ion-select id="api_select">

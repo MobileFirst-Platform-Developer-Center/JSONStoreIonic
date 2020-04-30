@@ -22,6 +22,10 @@ export class HomePage {
   // Display Components
   resultsDiv = "";
 
+  // Input Data
+  initUsername;
+  initPassword;
+
   constructor(private zone: NgZone) {
   }
   
@@ -131,23 +135,23 @@ showHideConsole(displayStatus){
 // initCollection
 //****************************************************
 initCollection(isSecured){
-  if(isSecured == "secured"){
-    this.options["username"] = document.getElementById("initUsername")["value"];
-    this.options["password"] = document.getElementById("initPassword")["value"];
+  if(isSecured){
+    this.options["username"] = this.initUsername;
+    this.options["password"] = this.initPassword;
   }
 
 WL.JSONStore.init(this.collections, this.options).then(() => {
   // build the <select> options + hide the init screen + display the second screen
     //  this.buildSelectOptions(document.getElementById("api_select"));
-      this. initCollection_screen = true;
+      this.initCollection_screen = true;
       this.apiCommands_screen = false;
 
       if(isSecured == "secured") {
          // this.showHideConsole("show");
           this.resultsDiv = "Secured Collection Initialized Successfuly<br>User Name: "+ this.options["username"] +" | Password: "+ this.options["password"];
           // Clear the username & password fields
-          document.getElementById("initUsername")["value"] = "";
-          document.getElementById("initPassword")["value"] = "";
+          this.initUsername = "";
+          this.initPassword = "";
       }
       else {
           this.resultsDiv = "Collection Initialized Successfuly";
@@ -164,8 +168,8 @@ WL.JSONStore.init(this.collections, this.options).then(() => {
 closeCollection(){
   WL.JSONStore.closeAll({}).then(() => {
       this.showHideConsole("show");
-      document.getElementById("apiCommands_screen").style.display = "none";
-      document.getElementById("initCollection_screen").style.display = "block";
+      this.apiCommands_screen = true;
+      this.initCollection_screen = false;
       this.resultsDiv = "Collection Closed Successfuly";
 }).fail((errorObject) => {
   alert("Failed to Close collection!");
@@ -179,8 +183,8 @@ closeCollection(){
 removeCollection(){
   WL.JSONStore.get(this.collectionName).removeCollection({}).then(() => {
       this.showHideConsole("show");
-      document.getElementById("apiCommands_screen").style.display = "none";
-      document.getElementById("initCollection_screen").style.display = "block";
+      this.apiCommands_screen = true;
+      this.initCollection_screen = false;
       this.resultsDiv = "Collection Removed Successfuly";
 }).fail((errorObject) => {
   alert("Failed to Remove collection!");
@@ -194,8 +198,8 @@ removeCollection(){
 destroy(){
   WL.JSONStore.destroy({}).then(() => {
       this.showHideConsole("show");
-      document.getElementById("apiCommands_screen").style.display = "none";
-      document.getElementById("initCollection_screen").style.display = "block";
+      this.apiCommands_screen = true;
+      this.initCollection_screen = false;
       this.resultsDiv = "Collection Destroyed Successfuly";
 }).fail((errorObject) => {
   alert("Failed to Destroy collection!");

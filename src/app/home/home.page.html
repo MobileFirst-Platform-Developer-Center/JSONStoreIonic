@@ -27,48 +27,48 @@
                 <ion-button (click)="destroy()">Destroy<br/>collection</ion-button>
               </div>
               <div id="selectBoxDiv">
-                  <ion-select id="api_select">
-                    <ion-select-option value="0">-- Select JSONStore action --</ion-select-option>
+                <ion-select (ionChange)="displayDiv($event)" placeholder="-- Select JSONStore action --" multiple="false" id="api_select">
+                  <ion-select-option value="{{option}}" *ngFor="let option of menuOptions">{{option}}</ion-select-option> 
                 </ion-select>
               </div>
               <div id="ApisAdditionalInfoWrapperDiv">
                   <!-- Add Data -->
-                  <div id="AddDataDiv" class="additionalInfoDiv">
+                  <div [hidden]="AddDataDiv" class="additionalInfoDiv">
                       <ion-input id='addName' type='text' placeholder='Name'></ion-input>
-        		      <ion-input id='addAge' type='text' placeholder='Age'></ion-input>
-                      <ion-button id="submitNewDocumentData" class="submit">Submit</ion-button>
+        		          <ion-input id='addAge' type='text' placeholder='Age'></ion-input>
+                      <ion-button (click)="addData()" class="submit">Submit</ion-button>
                   </div>
                   <!-- Find Documents -->
-                  <div id="FindDocDiv" class="additionalInfoDiv">
+                  <div [hidden]="FindDocDiv" class="additionalInfoDiv">
                       <ion-input id='findWhat' type='text' placeholder='Find Criteria'></ion-input>
-                      <ion-button id="findById" class="submit">Find by ID</ion-button>
-                      <ion-button id="findByName" class="submit">Find by Name</ion-button>
-                      <ion-button id="findByAge" class="submit">Find by Age</ion-button><br/>
-                      <ion-button id="findAll" class="WideSubmition-button">Find All</ion-button>                    
+                      <ion-button (click)="findById()" class="submit">Find by ID</ion-button>
+                      <ion-button (click)="findByName()" class="submit">Find by Name</ion-button>
+                      <ion-button (click)="findByAge()" class="submit">Find by Age</ion-button><br/>
+                      <ion-button (click)="findAll()" class="WideSubmition-button">Find All</ion-button>                    
                   </div>
                   <!-- Replace Documents Data -->
-                  <div id="ReplaceDocDiv" class="additionalInfoDiv">
+                  <div [hidden]="ReplaceDocDiv" class="additionalInfoDiv">
                       <ion-input id='replaceDocId' type='text' style="width:40%" placeholder='Document Id to replace'></ion-input>                   
-                      <ion-button id="showDocToReplace" class="submit" style="width:50%">Display Document Info</ion-button>                    
+                      <ion-button (click)="replaceShowDoc()" class="submit" style="width:50%">Display Document Info</ion-button>                    
                       <ion-input id='replaceName' type='text' placeholder='Name' ></ion-input>
-        		      <ion-input id='replaceAge' type='text' placeholder='Age' ></ion-input>
-                      <ion-button id="submitReplacedDoc" class="WideSubmition-button">Replace</ion-button>                      
+        		          <ion-input id='replaceAge' type='text' placeholder='Age' ></ion-input>
+                      <ion-button (click)="replaceDoc()" class="WideSubmition-button">Replace</ion-button>                      
                   </div>
                   <!-- Remove Documents -->
-                  <div id="RemoveDocDiv" class="additionalInfoDiv">
+                  <div [hidden]="RemoveDocDiv" class="additionalInfoDiv">
                       <ion-input id='docId' type='text' placeholder='Document ID for Removal'></ion-input>
-                      <ion-button id="removeDoc" class="WideSubmition-button">Remove</ion-button>
+                      <ion-button (click)="removeDoc()" class="WideSubmition-button">Remove</ion-button>
                   </div>
                   <!-- Adapter Integration -->
-                  <div id="AdapterIntegrationDiv" class="additionalInfoDiv">
-                      <ion-button id="loadFromAdapter" class="WideSubmition-button">Load Data From Adapter</ion-button>
-                      <ion-button id="getDirtyDocs" class="WideSubmition-button">Get Dirt Documents</ion-button>
-                      <ion-button id="pushToAdapter" class="WideSubmition-button">Push Data To Adapter</ion-button>
+                  <div [hidden]="AdapterIntegrationDiv" class="additionalInfoDiv">
+                      <ion-button (click)="loadFromAdapter()" class="WideSubmition-button">Load Data From Adapter</ion-button>
+                      <ion-button (click)="getDirtyDoc()" class="WideSubmition-button">Get Dirt Documents</ion-button>
+                      <ion-button (click)="pushToAdapter()" class="WideSubmition-button">Push Data To Adapter</ion-button>
                   </div>
                   <!-- Change Password -->                  
-                  <div id="ChangePasswordDiv" class="additionalInfoDiv">
+                  <div [hidden]="ChangePasswordDiv" class="additionalInfoDiv">
         		      <ion-input id='newPassword' type='text' placeholder='New password'></ion-input>
-                      <ion-button id="submitNewPassword" class="submit">Submit</ion-button>
+                      <ion-button (click)="changePassword()" class="submit">Submit</ion-button>
                   </div>
               </div>                         
             </div>

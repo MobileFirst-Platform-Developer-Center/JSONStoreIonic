@@ -1,4 +1,5 @@
 import { Component, NgZone } from '@angular/core';
+import { throws } from 'assert';
 
 @Component({
   selector: 'app-home',
@@ -18,65 +19,24 @@ export class HomePage {
   // View Components
   initCollection_screen = false;
   apiCommands_screen = true;
+  AddDataDiv = true;
+  FindDocDiv = true;
+  ReplaceDocDiv = true;
+  AdapterIntegrationDiv = true;
+  ChangePasswordDiv = true;
+  RemoveDocDiv = true;
 
   // Display Components
   resultsDiv = "";
+  menuOptions = ["Add Data", "Find Document", "Replace Document", "Count Documents","Adapter Integration","File Info"];
 
   // Input Data
   initUsername;
   initPassword;
 
   constructor(private zone: NgZone) {
-  }
-  
- 
-
-  ngAfterViewInit() {
     this.collections[this.collectionName] = {};
     this.collections[this.collectionName].searchFields = {name: 'string', age: 'integer'};
-    // Get the selected API from the HTML select element and use the this.displayDiv() function to display the appropriate HTML div
-    // var obj = document.getElementById("api_select");
-    // obj.addEventListener("change", function() {
-    //     // Add Document
-    //     if(obj.selectedIndex == 1){
-    //         this.showHideConsole("hide");
-    //         this.displayDiv("AddDataDiv");
-    //     }
-    //     // Find Document
-    //     else if(obj.selectedIndex == 2) {
-    //         this.showHideConsole("show");
-    //         this.displayDiv("FindDocDiv");
-    //     }
-    //     // Replace Document
-    //     else if(obj.selectedIndex == 3) {
-    //         this.showHideConsole("hide");
-    //         this.displayDiv("ReplaceDocDiv");
-    //     }
-    //     // Remove Document
-    //     else if(obj.selectedIndex == 4) {
-    //         this.showHideConsole("show");
-    //         this.displayDiv("RemoveDocDiv");
-    //     }
-    //     // Count Documents
-    //     else if(obj.selectedIndex == 5) {
-    //         this.showHideConsole("show");
-    //         countDocs();
-    //     }
-    //     // Adapter Integration
-    //     else if(obj.selectedIndex == 6) {
-    //         this.showHideConsole("show");
-    //         this.displayDiv("AdapterIntegrationDiv");
-    //     }
-    //     // File Info
-    //     else if(obj.selectedIndex == 7) {
-    //         this.showHideConsole("show");
-    //         getFileInfo();
-    //     }
-    //     // Change Password
-    //     else if(obj.selectedIndex == 8) {
-    //         this.displayDiv("ChangePasswordDiv");
-    //     }
-    // });
   }
 
 
@@ -85,19 +45,11 @@ export class HomePage {
 // - This function builds the options of the API-select-object
 //   of the API-select-object after initialization of the collection
 //*********************************************************************
-buildSelectOptions(obj) {
-  //obj.options[1] = new Option("addData", "Add Data", true, false);
-  obj.options[1] = new Option("Add Data");
-  obj.options[2] = new Option("Find Document");
-  obj.options[3] = new Option("Replace Document");
-  obj.options[4] = new Option("Remove Document");
-  obj.options[5] = new Option("Count Documents");
-  obj.options[6] = new Option("Adapter Integration");
-  obj.options[7] = new Option("File Info");
+buildSelectOptions() {
+  this.menuOptions = ["Add Data", "Find Document", "Replace Document", "Count Documents","Adapter Integration","File Info"];
   if(this.options["username"] != undefined && this.options["password"] != undefined){
-      obj.options[8] = new Option("Change Password");
+    this.menuOptions.push("Change Password");
   }
-
 }
 
 //*********************************************************************
@@ -106,12 +58,43 @@ buildSelectOptions(obj) {
 //   additional data. For example: add data requires new name & age
 //   for the new document to add.
 //*********************************************************************
-displayDiv(divName){
-  var divNames = ["AddDataDiv", "FindDocDiv", "ReplaceDocDiv", "RemoveDocDiv", "AdapterIntegrationDiv", "ChangePasswordDiv"];
-  for(var i=0; i<divNames.length; i++){
-      document.getElementById(divNames[i]).style.display = "none";
+displayDiv(option){
+  
+  this.AddDataDiv = true;
+  this.FindDocDiv = true;
+  this.ReplaceDocDiv = true;
+  this.AdapterIntegrationDiv = true;
+  this.ChangePasswordDiv = true;
+  this.RemoveDocDiv = true;
+
+  switch (option.detail.value) {
+    case this.menuOptions[0]:
+      this.AddDataDiv = false;
+      break;
+    case this.menuOptions[1]:
+      this.FindDocDiv = false;
+      break;
+    case this.menuOptions[2]:
+      this.ReplaceDocDiv = false;
+      break;
+    case this.menuOptions[3]:
+      this.RemoveDocDiv = false;
+      break;
+    case this.menuOptions[4]:
+      this.countDocs();
+      break;
+    case this.menuOptions[5]:
+      this.AdapterIntegrationDiv = false;
+      break;
+    case this.menuOptions[6]:
+      this.getFileInfo();
+      break;
+    case this.menuOptions[7]:
+      this.ChangePasswordDiv = false;
+      break;
+    default:
+      break;
   }
-  document.getElementById(divName).style.display = "block";
 }
 
 //****************************************************
@@ -142,7 +125,7 @@ initCollection(isSecured){
 
 WL.JSONStore.init(this.collections, this.options).then(() => {
   // build the <select> options + hide the init screen + display the second screen
-    //  this.buildSelectOptions(document.getElementById("api_select"));
+      this.buildSelectOptions();
       this.initCollection_screen = true;
       this.apiCommands_screen = false;
 

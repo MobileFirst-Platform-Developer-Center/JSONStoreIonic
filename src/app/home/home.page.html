@@ -10,15 +10,15 @@
 
         <div id="container">           
             <div [hidden]="initCollection_screen" id="initCollection_screen" >
-                <h3 style="margin-ion-button:3px">Initialize a collection:</h3>
-                <ion-button  (click)="initCollection(false)" class="WideSubmition-button">Initialize collection</ion-button>
+                <h3 style="margin-button:3px">Initialize a collection:</h3>
+                <ion-button  (click)="initCollection(false)" class="WideSubmitbutton">Initialize collection</ion-button>
                 <hr />
-                <h3 style="margin-ion-button:3px">Initialize a secured collection:</h3>
+                <h3 style="margin-button:3px">Initialize a secured collection:</h3>
                 <p>A collection can be initializes as a <b>secured collection</b> by defining a username and password.
                 When initializing a collection with username and password - the collection data will be encrypted.</p>                
                   <ion-input [(ngModel)]='initUsername' type='text' placeholder='user name'></ion-input>
         		    <ion-input [(ngModel)]='initPassword' type='password' placeholder='password'></ion-input>
-                    <ion-button (click)="initCollection(true)" class="WideSubmition-button">Initialize secured collection</ion-button>          
+                    <ion-button (click)="initCollection(true)" class="WideSubmitbutton">Initialize secured collection</ion-button>          
             </div>
             <div [hidden]="apiCommands_screen" id="apiCommands_screen" >
               <div id="CloseRemoveDestroyButtonsDiv" align="center">
@@ -34,40 +34,40 @@
               <div id="ApisAdditionalInfoWrapperDiv">
                   <!-- Add Data -->
                   <div [hidden]="AddDataDiv" class="additionalInfoDiv">
-                      <ion-input id='addName' type='text' placeholder='Name'></ion-input>
-        		          <ion-input id='addAge' type='text' placeholder='Age'></ion-input>
+                      <ion-input [(ngModel)]='addName' type='text' placeholder='Name'></ion-input>
+        		          <ion-input [(ngModel)]='addAge' type='text' placeholder='Age'></ion-input>
                       <ion-button (click)="addData()" class="submit">Submit</ion-button>
                   </div>
                   <!-- Find Documents -->
                   <div [hidden]="FindDocDiv" class="additionalInfoDiv">
-                      <ion-input id='findWhat' type='text' placeholder='Find Criteria'></ion-input>
+                      <ion-input [(ngModel)]='findWhat' type='text' placeholder='Find Criteria'></ion-input>
                       <ion-button (click)="findById()" class="submit">Find by ID</ion-button>
                       <ion-button (click)="findByName()" class="submit">Find by Name</ion-button>
                       <ion-button (click)="findByAge()" class="submit">Find by Age</ion-button><br/>
-                      <ion-button (click)="findAll()" class="WideSubmition-button">Find All</ion-button>                    
+                      <ion-button (click)="findAll()" class="WideSubmitbutton">Find All</ion-button>                    
                   </div>
                   <!-- Replace Documents Data -->
                   <div [hidden]="ReplaceDocDiv" class="additionalInfoDiv">
-                      <ion-input id='replaceDocId' type='text' style="width:40%" placeholder='Document Id to replace'></ion-input>                   
+                      <ion-input [(ngModel)]='replaceDocId' type='text' style="width:40%" placeholder='Document Id to replace'></ion-input>                   
                       <ion-button (click)="replaceShowDoc()" class="submit" style="width:50%">Display Document Info</ion-button>                    
-                      <ion-input id='replaceName' type='text' placeholder='Name' ></ion-input>
-        		          <ion-input id='replaceAge' type='text' placeholder='Age' ></ion-input>
-                      <ion-button (click)="replaceDoc()" class="WideSubmition-button">Replace</ion-button>                      
+                      <ion-input [(ngModel)]='replaceName' type='text' placeholder='Name' ></ion-input>
+        		          <ion-input [(ngModel)]='replaceAge' type='text' placeholder='Age' ></ion-input>
+                      <ion-button (click)="replaceDoc()" class="WideSubmitbutton">Replace</ion-button>                      
                   </div>
                   <!-- Remove Documents -->
                   <div [hidden]="RemoveDocDiv" class="additionalInfoDiv">
-                      <ion-input id='docId' type='text' placeholder='Document ID for Removal'></ion-input>
-                      <ion-button (click)="removeDoc()" class="WideSubmition-button">Remove</ion-button>
+                      <ion-input [(ngModel)]='docId' type='text' placeholder='Document ID for Removal'></ion-input>
+                      <ion-button (click)="removeDoc()" class="WideSubmitbutton">Remove</ion-button>
                   </div>
                   <!-- Adapter Integration -->
                   <div [hidden]="AdapterIntegrationDiv" class="additionalInfoDiv">
-                      <ion-button (click)="loadFromAdapter()" class="WideSubmition-button">Load Data From Adapter</ion-button>
-                      <ion-button (click)="getDirtyDoc()" class="WideSubmition-button">Get Dirt Documents</ion-button>
-                      <ion-button (click)="pushToAdapter()" class="WideSubmition-button">Push Data To Adapter</ion-button>
+                      <ion-button (click)="loadFromAdapter()" class="WideSubmitbutton">Load Data From Adapter</ion-button>
+                      <ion-button (click)="getDirtyDoc()" class="WideSubmitbutton">Get Dirt Documents</ion-button>
+                      <ion-button (click)="pushToAdapter()" class="WideSubmitbutton">Push Data To Adapter</ion-button>
                   </div>
                   <!-- Change Password -->                  
                   <div [hidden]="ChangePasswordDiv" class="additionalInfoDiv">
-        		      <ion-input id='newPassword' type='text' placeholder='New password'></ion-input>
+                    <ion-input [(ngModel)]='newPassword' type='text' placeholder='New password'></ion-input>
                       <ion-button (click)="changePassword()" class="submit">Submit</ion-button>
                   </div>
               </div>                         

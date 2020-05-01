@@ -33,6 +33,15 @@ export class HomePage {
   // Input Data
   initUsername;
   initPassword;
+  addName;
+  addAge;
+  findWhat;
+  replaceDocId;
+  replaceName;
+  replaceAge;
+  docId;
+  newPassword;
+
 
   constructor(private zone: NgZone) {
     this.collections[this.collectionName] = {};
@@ -78,18 +87,15 @@ displayDiv(option){
       this.ReplaceDocDiv = false;
       break;
     case this.menuOptions[3]:
-      this.RemoveDocDiv = false;
-      break;
-    case this.menuOptions[4]:
       this.countDocs();
       break;
-    case this.menuOptions[5]:
+    case this.menuOptions[4]:
       this.AdapterIntegrationDiv = false;
       break;
-    case this.menuOptions[6]:
+    case this.menuOptions[5]:
       this.getFileInfo();
       break;
-    case this.menuOptions[7]:
+    case this.menuOptions[6]:
       this.ChangePasswordDiv = false;
       break;
     default:
@@ -125,13 +131,13 @@ initCollection(isSecured){
 
 WL.JSONStore.init(this.collections, this.options).then(() => {
   // build the <select> options + hide the init screen + display the second screen
+      this.showHideConsole("show");
       this.buildSelectOptions();
       this.initCollection_screen = true;
       this.apiCommands_screen = false;
 
       if(isSecured == "secured") {
-         // this.showHideConsole("show");
-          this.resultsDiv = "Secured Collection Initialized Successfuly<br>User Name: "+ this.options["username"] +" | Password: "+ this.options["password"];
+          this.resultsDiv = "Secured Collection Initialized Successfuly\nUser Name: "+ this.options["username"] +" | Password: "+ this.options["password"];
           // Clear the username & password fields
           this.initUsername = "";
           this.initPassword = "";
@@ -195,13 +201,13 @@ destroy(){
 addData(){
   var data = {};
   var options = {};
-  data["name"] = document.getElementById("addName")["value"];
-  data["age"] = document.getElementById("addAge")["value"];
+  data["name"] = this.addName;
+  data["age"] = this.addAge;
 
   try {
       WL.JSONStore.get(this.collectionName).add(data, options).then(() => {
           this.showHideConsole("show");
-          this.resultsDiv = "New Document Added Successfuly<br>Name: "+data["name"]+" | Age: "+data["age"];
+          this.resultsDiv = "New Document Added Successfuly\nName: "+data["name"]+" | Age: "+data["age"];
   }).fail((errorObject) => {
           this.showHideConsole("show");
           this.resultsDiv = "Failed to Add Data";
@@ -210,8 +216,8 @@ addData(){
   catch(e){
       alert("WL.JSONStore Add Data Failure");
   }
-  document.getElementById("addName")["value"] = "";
-  document.getElementById("addAge")["value"] = "";
+  this.addName = "";
+  this.addAge = "";
 }
 
 //****************************************************
@@ -220,7 +226,7 @@ addData(){
 findById(){
   this.showHideConsole("show");
   var object = [];
-  var id = parseInt(document.getElementById("findWhat")["value"], 10) || '';
+  var id = parseInt(this.findWhat, 10) || '';
   object.push(id);
 
   try {
@@ -232,7 +238,7 @@ findById(){
 } catch (e) {
   alert(e.Messages);
 }
-  document.getElementById("findWhat")["value"] = "";
+  this.findWhat = "";
 }
 
 //****************************************************
@@ -240,12 +246,11 @@ findById(){
 //****************************************************
 findByName(){
   this.showHideConsole("show");
-  var name = document.getElementById("findWhat")["value"] || '';
-  var query = {};
-  query[name] = name;
+  var name = this.findWhat || '';
+  this.query =  {name: name};
   if(name != ""){
       try {
-          WL.JSONStore.get(this.collectionName).find(query, this.options).then((res) => {
+          WL.JSONStore.get(this.collectionName).find(this.query, this.options).then((res) => {
           this.resultsDiv = JSON.stringify(res);
       }).fail((errorObject) => {
           this.resultsDiv = errorObject.msg;
@@ -257,7 +262,7 @@ findByName(){
   else {
       alert("Please enter a name to find");
   }
-  document.getElementById("findWhat")["value"] = "";
+  this.findWhat = "";
 }
 
 //****************************************************
@@ -265,7 +270,7 @@ findByName(){
 //****************************************************
 findByAge(){
   this.showHideConsole("show");
-  var age = document.getElementById("findWhat")["value"] || '';
+  var age = this.findWhat || '';
 
   if(age == "" || isNaN(age)){
       alert("Please enter a valid age to find");
@@ -287,7 +292,7 @@ findByAge(){
           alert(e.Messages);
       }
   }
-  document.getElementById("findWhat")["value"] = "";
+  this.findWhat = "";
 }
 
 //****************************************************
@@ -306,7 +311,7 @@ findAll(){
 } catch (e) {
   alert(e.Messages);
 }
-  document.getElementById("findWhat")["value"] = "";
+  this.findWhat = "";
 }
 
 //****************************************************
@@ -314,13 +319,13 @@ findAll(){
 //****************************************************
 replaceShowDoc(){
  var obj = [];
- var id = parseInt(document.getElementById("replaceDocId")["value"], 10);
+ var id = parseInt(this.replaceDocId, 10);
  obj.push(id);
  this.showHideConsole("hide");
  try {
       WL.JSONStore.get(this.collectionName).findById(obj,{}).then((res) => {
-          document.getElementById("replaceName")["value"] = res[0].json.name;
-          document.getElementById("replaceAge")["value"] = res[0].json.age;
+          this.replaceName = res[0].json.name;
+          this.replaceAge = res[0].json.age;
       }).fail((errorObject) => {
           alert(errorObject.msg);
       });
@@ -333,19 +338,19 @@ replaceShowDoc(){
 // clearAndHideReplaceDiv
 //****************************************************
 clearAndHideReplaceDiv(){
-  document.getElementById("replaceDocId")["value"] = "";
-  document.getElementById("replaceName")["value"] = "";
-  document.getElementById("replaceAge")["value"] = "";
-  document.getElementById("ReplaceDocDiv").style.display = "none";
+  this.replaceDocId = "";
+  this.replaceName = "";
+  this.replaceAge = "";
+  this.ReplaceDocDiv = true;
 }
 
 //****************************************************
 // replaceDoc
 //****************************************************
 replaceDoc(){
-  var doc_id = parseInt(document.getElementById("replaceDocId")["value"], 10);
-  var doc_name = document.getElementById("replaceName")["value"];
-  var doc_age = document.getElementById("replaceAge")["value"];
+  var doc_id = parseInt(this.replaceDocId, 10);
+  var doc_name = this.replaceName;
+  var doc_age = this.replaceAge;
   var doc = {_id: doc_id, json: {name: doc_name, age: doc_age}};
 
   var options = {
@@ -368,7 +373,7 @@ replaceDoc(){
 //****************************************************
 removeDoc(){
   this.showHideConsole("show");
-  var id = parseInt(document.getElementById("docId")["value"], 10);
+  var id = parseInt(this.docId, 10);
   var query = {_id: id};
   var options = {exact: true};
   try {
@@ -380,7 +385,7 @@ removeDoc(){
   } catch (e) {
   alert(e.Messages);
 }
-  document.getElementById("docId")["value"] = "";
+  this.docId = "";
 }
 
 //****************************************************
@@ -457,7 +462,7 @@ loadFromAdapter(){
 getDirtyDocs(){
   try {
       WL.JSONStore.get(this.collectionName).getAllDirty({}).then((res) => {
-          this.resultsDiv = "Dirty Documents:<br>" + JSON.stringify(res);
+          this.resultsDiv = "Dirty Documents:\n" + JSON.stringify(res);
       }).fail((errorObject) => {
           alert("Failed to get dirty documents:\n"+ errorObject.msg);
       });
@@ -521,7 +526,7 @@ pushToAdapter(){
 //****************************************************
 changePassword(){
   this.showHideConsole("show");
-  var newPassword = document.getElementById("newPassword")["value"];
+  var newPassword = this.newPassword;
   if(newPassword == ""){
       alert("Please enter new password");
   }

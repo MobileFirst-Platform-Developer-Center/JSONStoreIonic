@@ -4,14 +4,14 @@ IBM MobileFirst Platform Foundation
 An application demonstrating various JSONStore APIs in a Ionic application.
 
 ### Tutorials
-https://mobilefirstplatform.ibmcloud.com/tutorials/en/foundation/8.0/using-the-mfpf-sdk/jsonstore-cordova/
+https://mobilefirstplatform.ibmcloud.com/tutorials/en/foundation/8.0/application-development/jsonstore/
 
 ### Usage
 
 1. Use either Maven, MobileFirst CLI or your IDE of choice to [build and deploy the adapter](https://mobilefirstplatform.ibmcloud.com/tutorials/en/foundation/8.0/adapters/creating-adapters/).
 2. From the command-line, navigate to the project's root folder.
-2. Add a platform by running the `cordova platform add` command.
-3. Run the Cordova application by running the `cordova run` command.
+2. Add a platform by running the `ionic cordova platform add` command.
+3. Run the Ionic application by running the `ionic cordova run ios` or `ionic cordova run android` command.
 
 JSONStore adapter: https://github.com/MobileFirst-Platform-Developer-Center/JSONStoreAdapter/tree/release80
 
